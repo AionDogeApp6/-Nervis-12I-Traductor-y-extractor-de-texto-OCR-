@@ -92,3 +92,521 @@
     </style>
 </head>
 <body>
+
+
+<div class="container">
+    <header>
+        <h1>*Nervis 12I* Traductor y extractor de texto (OCR)</h1>
+        <p>Captura o sube imágenes en lote. Traduce textos largos sin límites; comparte o descarga en pdf, word, WhatsApp...</p>
+    </header>
+
+    <div class="grid">
+        <div class="col">
+            <div class="card">
+                <h2>📸 Captura & Extracción de Texto (OCR)</h2>
+                
+                <div class="batch-header">
+                    <div class="status-badge" id="uploadCount">Imágenes en lote: 0 / 100</div>
+                    <button type="button" class="btn btn-secondary" id="btnClearBatch" style="padding: 4px 10px; font-size: 11px; font-weight: bold; border-color: #fca5a5; color: #b91c1c;">🧹 Limpiar Lote</button>
+                </div>
+                
+                <div class="file-upload-wrapper">
+                    <button class="btn btn-secondary" style="width: 100%;">📁 Seleccionar De Galería</button>
+                    <input type="file" id="imageInput" class="file-upload-input" multiple accept="image/*">
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn" id="btnOpenCamera">🎥 Encender Cámara</button>
+                    <button type="button" class="btn btn-danger" id="btnCapturePhoto" style="display: none;">📸 Capturar Foto</button>
+                </div>
+
+                <div id="ocrStatus" class="ocr-loading">🔄 Procesando caracteres e imagen... Por favor, espere.</div>
+
+                <div id="cameraStreamContainer">
+                    <video id="cameraVideo" autoplay playsinline></video>
+                    <canvas id="cameraCanvas" style="display:none;"></canvas>
+                </div>
+
+                <div class="image-gallery" id="previewGallery" style="margin-top: 15px;"></div>
+            </div>
+
+            <div class="card">
+                <h2>🌐 Traducción por Bloques (Ilimitada)</h2>
+                <div class="form-group">
+               <label for="targetLang">Idioma Destino:</label>
+               <select id="targetLang">
+                <option value="es">Español (es)</option>
+               <option value="en" selected>Inglés (en)</option>
+               <option value="ar">Árabe (ar)</option>
+               <option value="pt">Portugués (pt)</option>
+                <option value="fr">Francés (fr)</option>
+                <option value="it">Italiano (it)</option>
+                <option value="de">Alemán (de)</option>
+               <option value="zh">Chino (zh)</option>
+               <option value="ja">Japonés (ja)</option>
+               <option value="ru">Ruso (ru)</option>
+               <option value="ko">Coreano (ko)</option>
+               <option value="hi">Hindi (hi)</option>
+              </select>
+
+                </div>
+                <button type="button" class="btn" id="btnTranslate" style="width: 100%;">🔄 Traducir Contenido Completo</button>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <h2>📝 Texto Detectado / Procesado</h2>
+                <div class="form-group">
+                    <label for="textContent">Resultado del Procesamiento:</label>
+                    <textarea id="textContent" placeholder="Los datos leídos por el OCR o los resultados traducidos aparecerán en esta área blanca..."></textarea>
+                </div>
+
+                <h2 style="border-left-color: var(--voice-color);">🎙️ Control y Asistencia de Voz</h2>
+                <div class="btn-group" style="margin-bottom: 15px;">
+                    <button type="button" class="btn btn-voice" id="btnMicrophone">🎙️ Dictar / Hablar</button>
+                    <button type="button" class="btn btn-voice" id="btnSpeaker" style="background-color: #6b7280;">🔊 Escuchar Texto</button>
+                </div>
+
+                <h2>📥 Guardar Archivos</h2>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success" id="btnExportPDF">📄 Exportar PDF</button>
+                    <button type="button" class="btn btn-success" id="btnExportWord">📘 Exportar Word</button>
+                </div>
+
+                <h2 style="margin-top: 20px;">🔗 Enviar Información</h2>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-whatsapp" id="btnShareWhatsApp">💬 Enviar a WhatsApp</button>
+                    <button type="button" class="btn btn-secondary" id="btnShareNative">📱 Compartir del Sistema
+                    
+<div style="text-align: center; margin: 25px 0;">
+    <button type="button" class="btn" id="btnDonar" style="background-color: #ec4899; color: white; padding: 12px 20px; border-radius: 50px; font-size: 14px; box-shadow: 0 4px 6px rgba(236, 72, 153, 0.3); border: none; cursor: pointer;">
+        💕💕 ¿Útil? Donar al creador
+    </button>
+</div>
+
+<div id="modalDonar" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center;">
+    <div class="card" style="width: 90%; max-width: 400px; text-align: center; border-radius: 20px; border: none; background: white; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <h2 style="color: #ec4899; margin-top: 0;">💕 Apoya el proyecto</h2>
+        <p style="margin-bottom: 20px; font-size: 14px; color: #57534e; line-height: 1.5;">
+            ¡Gracias por valorar el trabajo de <strong>Renderizado Móvil</strong>! Puedes colaborar mediante Pago Móvil (Toca un dato para copiarlo):
+        </p>
+        
+        <div style="background: #fdfaf7; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e7e5e4; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 15px; font-weight: bold; color: #78716c; padding: 5px 0;">
+                🏦 Banco de Venezuela
+            </div>
+            <div id="copyCedula" style="padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 15px; background: #f5f5f4; color: #444; transition: background 0.2s;">
+                🪪 V-18.861.481
+            </div>
+            <div id="copyTelefono" style="padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 15px; background: #f5f5f4; color: #444; transition: background 0.2s;">
+                📱 0414-5834403
+            </div>
+        </div>
+
+        <button type="button" class="btn" id="btnCloseModal" style="width: 100%; background-color: #78716c; color: white; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold;">
+            Cerrar
+        </button>
+    </div>
+</div>
+
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+window.jsPDF = window.jspdf.jsPDF;
+let localStream = null;
+let uploadedImagesStore = [];
+let recognitionInstance = null; // Instancia global para el micrófono
+
+const MediaManager = {
+    async openCamera() {
+        try {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+            document.getElementById('cameraVideo').srcObject = localStream;
+            document.getElementById('cameraStreamContainer').style.display = 'block';
+            document.getElementById('btnCapturePhoto').style.display = 'inline-flex';
+            document.getElementById('btnOpenCamera').innerText = "❌ Apagar Cámara";
+        } catch (error) {
+            alert("No se pudo acceder a la cámara del terminal.");
+        }
+    },
+
+    closeCamera() {
+        if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
+        document.getElementById('cameraStreamContainer').style.display = 'none';
+        document.getElementById('btnCapturePhoto').style.display = 'none';
+        document.getElementById('btnOpenCamera').innerText = "🎥 Encender Cámara";
+    },
+
+    async capturePhoto() {
+        const video = document.getElementById('cameraVideo');
+        const canvas = document.getElementById('cameraCanvas');
+        if (!localStream) return;
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        const base64Data = canvas.toDataURL('image/jpeg');
+        if (uploadedImagesStore.length >= 100) return alert("Límite de lote alcanzado.");
+
+        uploadedImagesStore.push({ id: Date.now() + Math.random(), base64: base64Data });
+        this.renderGallery();
+        await this.runOCR(base64Data);
+    },
+
+    handleImageUpload(e) {
+        const files = Array.from(e.target.files);
+        if ((uploadedImagesStore.length + files.length) > 100) return alert("Máximo 100 imágenes.");
+
+        files.filter(f => f.type.startsWith('image/')).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                uploadedImagesStore.push({ id: Date.now() + Math.random(), base64: event.target.result });
+                MediaManager.renderGallery();
+                await MediaManager.runOCR(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    },
+
+    async runOCR(base64) {
+        const indicator = document.getElementById('ocrStatus');
+        indicator.style.display = 'block';
+        try {
+            const result = await Tesseract.recognize(base64, 'eng+spa+fra+ita+deu');
+            if(result && result.data && result.data.text) {
+                const txt = result.data.text.trim();
+                if(txt) {
+                    const area = document.getElementById('textContent');
+                    area.value = area.value ? area.value + "\n" + txt : txt;
+                    // Alerta por voz al terminar OCR con éxito
+                    VoiceManager.speak("Texto extraído correctamente.");
+                }
+            }
+        } catch (err) {
+            console.error("Error en procesamiento OCR:", err);
+        } finally {
+            indicator.style.display = 'none';
+        }
+    },
+
+    deleteImage(id) {
+        uploadedImagesStore = uploadedImagesStore.filter(img => img.id !== id);
+        this.renderGallery();
+    },
+
+    clearAll() {
+        uploadedImagesStore = [];
+        document.getElementById('textContent').value = '';
+        this.renderGallery();
+    },
+
+    renderGallery() {
+        const gal = document.getElementById('previewGallery');
+        gal.innerHTML = '';
+        document.getElementById('uploadCount').innerText = `Imágenes en lote: ${uploadedImagesStore.length} / 100`;
+        
+        uploadedImagesStore.forEach(img => {
+            const el = document.createElement('div');
+            el.className = 'gallery-item';
+            el.innerHTML = `
+                <img src="${img.base64}">
+                <button type="button" class="btn-delete-item" title="Eliminar imagen">×</button>
+            `;
+            el.querySelector('.btn-delete-item').addEventListener('click', () => this.deleteImage(img.id));
+            gal.appendChild(el);
+        });
+    }
+};
+
+const TranslationManager = {
+    splitTextIntoChunks(text, maxLength = 400) {
+        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+        const chunks = [];
+        let currentChunk = "";
+
+        for (let sentence of sentences) {
+            if ((currentChunk + sentence).length > maxLength) {
+                if (currentChunk) chunks.push(currentChunk.trim());
+                currentChunk = sentence;
+            } else {
+                currentChunk += sentence;
+            }
+        }
+        if (currentChunk) chunks.push(currentChunk.trim());
+        return chunks;
+    },
+
+    async translateText(text, targetLang) {
+        if (!text || !text.trim()) return '';
+        const chunks = this.splitTextIntoChunks(text);
+        const results = [];
+
+        for (let i = 0; i < chunks.length; i++) {
+            try {
+                const langPair = `autodetect|${targetLang}`;
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunks[i])}&langpair=${encodeURIComponent(langPair)}`;
+                
+                const res = await fetch(url);
+                const data = await res.json();
+            // Dentro del evento click de 'btnTranslate'
+                const lang = document.getElementById('targetLang').value;
+                 const area = document.getElementById('textContent');
+                area.dir = (lang === 'ar') ? 'rtl' : 'ltr'; // Cambia la dirección si es Árabe
+
+                if (data && data.responseData && data.responseData.translatedText) {
+                    results.push(data.responseData.translatedText);
+                } else {
+                    results.push(chunks[i]);
+                }
+            } catch (err) {
+                results.push(chunks[i]);
+            }
+        }
+        return results.join(" ");
+    }
+};
+
+const ExportManager = {
+    exportToPDF(text, images) {
+        const doc = new jsPDF();
+        const split = doc.splitTextToSize(text || "Sin contenido.", 180);
+        doc.text(split, 10, 15);
+        let y = 20 + (split.length * 7);
+        
+        images.forEach(img => {
+            if (y > 240) { doc.addPage(); y = 15; }
+            try { doc.addImage(img.base64, 'JPEG', 10, y, 50, 40); y += 45; } catch (e) {}
+        });
+        doc.save('documento_traduccion.pdf');
+    },
+
+    exportToWord(text, images) {
+        let imgsHtml = '';
+        images.forEach(img => { imgsHtml += `<p><img src="${img.base64}" width="220"></p><br>`; });
+        const bodyHtml = `<h2>Contenido Procesado</h2><p>${text}</p><hr>${imgsHtml}`;
+        const headerHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body>";
+        
+        const blob = new Blob(['\ufeff' + headerHtml + bodyHtml + "</body></html>"], { type: 'application/msword' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'documento_traduccion.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+};
+
+// ==========================================
+// NUEVO GESTOR: ALTAVOZ Y MICRÓFONO (VoiceManager)
+// ==========================================
+const VoiceManager = {
+    // FUNCIÓN ALTAVOZ OPTIMIZADA PARA LOS 12 IDIOMAS
+    speak(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Detiene lecturas previas o en cola
+            if (!text || text.trim() === "") return;
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // 1. Detectamos automáticamente qué idioma está seleccionado en el formulario
+            const idiomaDestino = document.getElementById('targetLang').value;
+            
+            // 2. Mapeamos el código simple al formato regional óptimo de voz
+            const mapasVoces = {
+                'es': 'es-VE', // Español
+                'en': 'en-US', // Inglés
+                'ar': 'ar-SA', // Árabe
+                'pt': 'pt-BR', // Portugués
+                'fr': 'fr-FR', // Francés
+                'it': 'it-IT', // Italiano
+                'de': 'de-DE', // Alemán
+                'zh': 'zh-CN', // Chino
+                'ja': 'ja-JP', // Japonés
+                'ru': 'ru-RU', // Ruso
+                'ko': 'ko-KR', // Coreano
+                'hi': 'hi-IN'  // Hindi
+            };
+
+            // 3. Asignamos el idioma dinámico (si no existe en el mapa, usa español por defecto)
+            utterance.lang = mapasVoces[idiomaDestino] || 'es-VE'; 
+            
+            utterance.rate = 1.0; // Velocidad normal de lectura
+            window.speechSynthesis.speak(utterance);
+        } else {
+            console.warn("La síntesis de voz no está soportada en este terminal.");
+        }
+    },
+
+    // FUNCIÓN MICRÓFONO
+    toggleMicrophone() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            return alert("El reconocimiento de voz no está soportado en este navegador.");
+        }
+
+        const btnMic = document.getElementById('btnMicrophone');
+
+        // Si ya está escuchando, lo apagamos
+        if (recognitionInstance) {
+            recognitionInstance.stop();
+            return;
+        }
+
+        recognitionInstance = new SpeechRecognition();
+        recognitionInstance.lang = 'es-VE';
+        recognitionInstance.interimResults = false;
+        recognitionInstance.maxAlternatives = 1;
+
+        recognitionInstance.onstart = () => {
+            btnMic.classList.add('recording');
+            btnMic.innerText = "🛑 Escuchando...";
+        };
+
+        recognitionInstance.onresult = (event) => {
+            const resultText = event.results[0][0].transcript.trim();
+            const area = document.getElementById('textContent');
+            
+               // Gestión inteligente por comandos verbales rápidos
+            const lowerCmd = resultText.toLowerCase();
+            if (lowerCmd === "limpiar lote" || lowerCmd === "borrar todo") {
+                MediaManager.clearAll();
+                VoiceManager.speak("Lote limpiado de forma correcta.");
+            } else if (lowerCmd === "traducir texto" || lowerCmd === "traducir") {
+                document.getElementById('btnTranslate').click();
+            } else if (lowerCmd === "exportar pdf") {
+                document.getElementById('btnExportPDF').click();
+            } else {
+                // Si no es un comando de gestión, escribe directamente por dictado de voz
+                area.value = area.value ? area.value + " " + resultText : resultText;
+                VoiceManager.speak("Añadido.");
+            }
+        };
+
+        recognitionInstance.onerror = (err) => {
+            console.error("Error de Micrófono:", err.error);
+        };
+
+        recognitionInstance.onend = () => {
+            btnMic.classList.remove('recording');
+            btnMic.innerText = "🎙️ Dictar / Hablar";
+            recognitionInstance = null;
+        };
+
+        recognitionInstance.start();
+    }
+};
+
+// Escuchas Logísticas
+document.getElementById('btnOpenCamera').addEventListener('click', () => localStream ? MediaManager.closeCamera() : MediaManager.openCamera());
+document.getElementById('btnCapturePhoto').addEventListener('click', () => MediaManager.capturePhoto());
+document.getElementById('imageInput').addEventListener('change', (e) => MediaManager.handleImageUpload(e));
+document.getElementById('btnClearBatch').addEventListener('click', () => {
+    if(confirm("¿Seguro que deseas vaciar el lote de imágenes y limpiar el texto?")) {
+        MediaManager.clearAll();
+    }
+});
+
+document.getElementById('btnTranslate').addEventListener('click', async () => {
+    const area = document.getElementById('textContent');
+    const cleanText = area.value.trim();
+    if (!cleanText) return alert("El cuadro está vacío. No hay nada que traducir.");
+    
+    const lang = document.getElementById('targetLang').value;
+    area.value = "Procesando fragmentos en ráfaga (Modo Sin Límites)... Un momento.";
+    VoiceManager.speak("Traduciendo bloques.");
+    
+    const finalTranslation = await TranslationManager.translateText(cleanText, lang);
+    area.value = finalTranslation;
+    VoiceManager.speak("Traducción completada.");
+});
+
+document.getElementById('btnExportPDF').addEventListener('click', () => ExportManager.exportToPDF(document.getElementById('textContent').value, uploadedImagesStore));
+document.getElementById('btnExportWord').addEventListener('click', () => ExportManager.exportToWord(document.getElementById('textContent').value, uploadedImagesStore));
+document.getElementById('btnShareWhatsApp').addEventListener('click', () => window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(document.getElementById('textContent').value)}`, '_blank'));
+document.getElementById('btnShareNative').addEventListener('click', () => navigator.share && navigator.share({ text: document.getElementById('textContent').value }));
+
+// Listeners añadidos para la gestión de Audio
+document.getElementById('btnMicrophone').addEventListener('click', () => VoiceManager.toggleMicrophone());
+document.getElementById('btnSpeaker').addEventListener('click', () => VoiceManager.speak(document.getElementById('textContent').value));
+
+// CONTROL DEL MODAL DE DONACIÓN E INTERACTIVIDAD DE COPIADO
+const btnDonar = document.getElementById('btnDonar');
+const modalDonar = document.getElementById('modalDonar');
+const btnCloseModal = document.getElementById('btnCloseModal');
+const copyCedula = document.getElementById('copyCedula');
+const copyTelefono = document.getElementById('copyTelefono');
+
+// Abrir modal de forma interactiva (flex para centrarlo verticalmente)
+btnDonar.addEventListener('click', () => {
+    modalDonar.style.display = 'flex';
+});
+
+// Cerrar modal con el botón interno
+btnCloseModal.addEventListener('click', () => {
+    modalDonar.style.display = 'none';
+});
+
+// Cerrar si hacen clic fuera de la tarjeta blanca
+window.addEventListener('click', (event) => {
+    if (event.target === modalDonar) {
+        modalDonar.style.display = 'none';
+    }
+});
+
+// Función optimizada para copiar datos limpios al portapapeles y dar feedback visual
+function ejecutarCopiado(elemento, textoLimpio, textoOriginal) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textoLimpio).then(() => {
+            elemento.innerText = '✅ ¡Copiado!';
+            elemento.style.backgroundColor = '#dcfce7'; // Fondo verde claro
+            elemento.style.color = '#15803d'; // Texto verde oscuro
+            
+            setTimeout(() => {
+                elemento.innerText = textoOriginal;
+                elemento.style.backgroundColor = '';
+                elemento.style.color = '';
+            }, 1500);
+        }).catch(err => console.error('Error al copiar: ', err));
+    } else {
+        // Alternativa de copiado para navegadores web viejos o HTTP no seguro
+        const textArea = document.createElement('textarea');
+        textArea.value = textoLimpio;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            elemento.innerText = '✅ ¡Copiado!';
+            elemento.style.backgroundColor = '#dcfce7';
+            setTimeout(() => {
+                elemento.innerText = textoOriginal;
+                elemento.style.backgroundColor = '';
+            }, 1500);
+        } catch (err) {
+            console.error('Error en fallback de copiado', err);
+        }
+        document.body.removeChild(textArea);
+    }
+}
+
+// Evento para copiar la Cédula (sin puntos ni letras para el banco)
+copyCedula.addEventListener('click', () => {
+    ejecutarCopiado(copyCedula, '18861481', '🪪 V-18.861.481');
+});
+
+// Evento para copiar el Teléfono (números puros)
+copyTelefono.addEventListener('click', () => {
+    ejecutarCopiado(copyTelefono, '04145834403', '📱 0414-5834403');
+});
+
+</script>
+
+</body>
+</html>
